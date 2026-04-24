@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, MessageSquare, Send, Phone, Github, CheckCircle } from 'lucide-react';
+import { Mail, MessageSquare, Send, Phone, Github, Linkedin, CheckCircle } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -82,6 +82,18 @@ const Contact = () => {
                   <div className="text-sm text-gray-500 uppercase tracking-widest mb-1">GitHub</div>
                   <a href="https://github.com/devwithrithvik" target="_blank" rel="noopener noreferrer" className="text-xl font-bold hover:text-accent-neon transition-colors">
                     @devwithrithvik
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-6 group">
+                <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center group-hover:bg-accent-blue/20 transition-colors">
+                  <Linkedin className="text-accent-blue" />
+                </div>
+                <div>
+                  <div className="text-sm text-gray-500 uppercase tracking-widest mb-1">LinkedIn</div>
+                  <a href="https://www.linkedin.com/in/rithvik-kolipaka-3479b5383" target="_blank" rel="noopener noreferrer" className="text-xl font-bold hover:text-accent-neon transition-colors">
+                    Rithvik Kolipaka
                   </a>
                 </div>
               </div>

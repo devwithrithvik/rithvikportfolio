@@ -86,6 +86,17 @@ const Navbar = () => {
                   {link.name}
                 </a>
               ))}
+              <div className="pt-4 border-t border-white/10 flex items-center space-x-6">
+                <a href="https://github.com/devwithrithvik" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white">
+                  <Github size={20} />
+                </a>
+                <a href="https://www.linkedin.com/in/rithvik-kolipaka-3479b5383" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white">
+                  <Linkedin size={20} />
+                </a>
+                <a href="mailto:rithvikkolipaka12@gmail.com" className="text-gray-400 hover:text-white">
+                  <Mail size={20} />
+                </a>
+              </div>
             </div>
           </motion.div>
         )}
