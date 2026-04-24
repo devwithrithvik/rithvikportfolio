@@ -6,6 +6,14 @@ import { ExternalLink, Github } from 'lucide-react';
 const Projects = () => {
   const projects = [
     {
+      title: "TitanX Gym",
+      description: "Next-generation fitness platform with AI-driven workouts, immersive 3D tracking, and premium performance monitoring.",
+      tech: ["React", "Three.js", "Tailwind", "Framer Motion"],
+      image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1000",
+      live: "https://titanxgym.netlify.app/",
+      github: "https://github.com/devwithrithvik",
+    },
+    {
       title: "Smart Expense Tracker",
       description: "AI-based financial insights platform with real-time tracking and personalized budget recommendations.",
       tech: ["React", "Tailwind", "Node.js", "Gemini AI"],

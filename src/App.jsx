@@ -10,7 +10,8 @@ import WhyChooseMe from './components/WhyChooseMe';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Admin from './components/Admin';
+import AdminMessages from './components/AdminMessages';
+import Inbox from './components/Inbox';
 
 const HomePage = () => {
   const { scrollYProgress } = useScroll();
@@ -76,7 +77,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/inbox" element={<Inbox />} />
+        <Route path="/admin/messages" element={<AdminMessages />} />
       </Routes>
     </Router>
   );

@@ -6,26 +6,30 @@ const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState('idle'); // idle, sending, success
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('sending');
 
-    // Simulate saving to database (using localStorage)
-    setTimeout(() => {
-      const messages = JSON.parse(localStorage.getItem('portfolio_messages') || '[]');
-      const newMessage = {
-        ...formData,
-        id: Date.now(),
-        date: new Date().toISOString(),
-        status: 'unread'
-      };
-      localStorage.setItem('portfolio_messages', JSON.stringify([newMessage, ...messages]));
-      
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-      
-      setTimeout(() => setStatus('idle'), 3000);
-    }, 1000);
+    try {
+      const response = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => setStatus('idle'), 5000);
+      } else {
+        setStatus('idle');
+        alert('Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setStatus('idle');
+      alert('Error sending message. Please try again.');
+    }
   };
   return (
     <section id="contact" className="section-padding relative">

@@ -10,9 +10,10 @@ const Footer = () => {
             <span className="text-accent-neon">RK</span>
             <span className="text-white">.dev</span>
           </div>
-          <p className="text-gray-500 text-sm max-w-xs">
+          <p className="text-gray-500 text-sm max-w-xs mb-4">
             Building the future of the web, one pixel at a time. Available for freelance opportunities.
           </p>
+          <a href="/inbox" className="text-accent-purple text-sm font-bold hover:underline">Check Private Inbox</a>
         </div>
 
         <div className="flex items-center space-x-6">
