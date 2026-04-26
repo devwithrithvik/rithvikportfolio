@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 import AdminMessages from './components/AdminMessages';
 import Inbox from './components/Inbox';
 import CustomCursor from './components/CustomCursor';
+import { Analytics } from "@vercel/analytics/react"
 
 const HomePage = () => {
   const { scrollYProgress } = useScroll();
@@ -104,6 +105,7 @@ function App() {
         <Route path="/inbox" element={<Inbox />} />
         <Route path="/admin/messages" element={<AdminMessages />} />
       </Routes>
+      <Analytics />
     </Router>
   );
 }
