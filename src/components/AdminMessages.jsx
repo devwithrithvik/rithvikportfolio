@@ -60,18 +60,43 @@ const AdminMessages = () => {
     if (!reply) return;
 
     try {
+      // 1. Try API update
       const response = await fetch(`/api/messages?id=${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reply }),
       });
-      const result = await response.json();
-      if (result.success) {
-        setMessages(messages.map(msg => msg._id === id ? result.data : msg));
-        setReplyText({ ...replyText, [id]: '' });
+      
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setMessages(messages.map(msg => msg._id === id ? result.data : msg));
+          setReplyText({ ...replyText, [id]: '' });
+          return;
+        }
       }
+      throw new Error('API reply failed');
     } catch (error) {
-      console.error('Error sending reply:', error);
+      console.warn('API Reply failed, falling back to LocalStorage:', error);
+      
+      // 2. Fallback: Update LocalStorage
+      const localMsgs = JSON.parse(localStorage.getItem('portfolio_messages') || '[]');
+      const updatedLocal = localMsgs.map(m => {
+        if (m.id === id || m._id === id) {
+          return { ...m, reply, status: 'replied' };
+        }
+        return m;
+      });
+      
+      localStorage.setItem('portfolio_messages', JSON.stringify(updatedLocal));
+      
+      // Update local state
+      setMessages(messages.map(msg => 
+        msg._id === id ? { ...msg, reply, status: 'replied' } : msg
+      ));
+      setReplyText({ ...replyText, [id]: '' });
+      
+      alert('Reply saved locally! (Note: Email reply requires a connected backend)');
     }
   };
 
