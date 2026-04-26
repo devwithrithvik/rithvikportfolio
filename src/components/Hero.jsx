@@ -38,13 +38,7 @@ const Hero = () => {
         animate="visible"
         className="max-w-4xl mx-auto z-10"
       >
-        <motion.div 
-          variants={itemVariants}
-          className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full glass border border-white/10 text-white/70 text-xs font-medium tracking-[0.2em] uppercase mb-8"
-        >
-          <Sparkles size={14} className="text-accent-purple" />
-          <span>Award Winning Portfolio</span>
-        </motion.div>
+
         
         <motion.h1 
           variants={itemVariants}
