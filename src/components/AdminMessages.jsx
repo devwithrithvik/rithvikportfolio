@@ -23,14 +23,33 @@ const AdminMessages = () => {
 
   const fetchMessages = async () => {
     setLoading(true);
+    setError('');
     try {
       const response = await fetch('/api/messages');
+      if (!response.ok) throw new Error('API not available');
+      
       const result = await response.json();
       if (result.success) {
         setMessages(result.data);
       }
-    } catch (error) {
-      console.error('Error fetching messages:', error);
+    } catch (err) {
+      console.warn('API Error, falling back to LocalStorage:', err);
+      // Fallback to localStorage
+      const localMsgs = JSON.parse(localStorage.getItem('portfolio_messages') || '[]');
+      // Map local storage format to API format if needed
+      const mappedLocal = localMsgs.map(m => ({
+        _id: m.id || Math.random().toString(36).substr(2, 9),
+        name: m.name,
+        email: m.email,
+        message: m.message,
+        createdAt: m.date || new Date().toISOString(),
+        status: m.status || 'unread'
+      }));
+      setMessages(mappedLocal);
+      
+      if (mappedLocal.length === 0) {
+        setError('No messages found in cloud or local storage.');
+      }
     } finally {
       setLoading(false);
     }
@@ -105,6 +124,17 @@ const AdminMessages = () => {
           <AnimatePresence>
             {loading ? (
               <div className="flex justify-center py-20"><Loader2 className="animate-spin text-accent-purple" size={48} /></div>
+            ) : messages.length === 0 ? (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-20 glass-card rounded-3xl"
+              >
+                <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
+                  <Mail className="text-gray-600" size={32} />
+                </div>
+                <p className="text-gray-500">{error || 'No messages received yet.'}</p>
+              </motion.div>
             ) : messages.map((msg) => (
               <motion.div 
                 key={msg._id}

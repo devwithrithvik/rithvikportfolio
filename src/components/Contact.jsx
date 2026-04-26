@@ -36,14 +36,19 @@ const Contact = () => {
 
     setStatus('sending');
 
-    // Replace these with your actual EmailJS IDs from your dashboard
-    // It's best to put these in a .env file
-    const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_id';
-    const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_id';
-    const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'public_key';
+    // Validate EmailJS keys
+    const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
+      console.error('EmailJS keys are missing. Please check your .env file.');
+      setStatus('error');
+      return;
+    }
 
     try {
-      // 1. Send via EmailJS
+      // 1. Send via EmailJS (Primary)
       await emailjs.send(
         SERVICE_ID,
         TEMPLATE_ID,
@@ -56,16 +61,17 @@ const Contact = () => {
         PUBLIC_KEY
       );
 
-      // 2. Backup to MongoDB (Optional but implemented as requested)
-      try {
-        await fetch('/api/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        });
-      } catch (backupError) {
-        console.warn('MongoDB Backup failed, but EmailJS succeeded:', backupError);
-      }
+      // 2. Backup to LocalStorage (Immediate fallback for local dev)
+      const localMessages = JSON.parse(localStorage.getItem('portfolio_messages') || '[]');
+      localMessages.push({ ...formData, id: Date.now(), date: new Date().toISOString(), status: 'unread' });
+      localStorage.setItem('portfolio_messages', JSON.stringify(localMessages));
+
+      // 3. Backup to MongoDB (Silent background task)
+      fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      }).catch(err => console.warn('MongoDB backup skipped (local environment or network error)'));
 
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
