@@ -46,7 +46,7 @@ const Hero = () => {
         >
           Hi, I’m <span className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">Rithvik</span>
           <br />
-          <span className="text-gradient drop-shadow-[0_0_30px_rgba(124,58,237,0.3)]">Premium</span> Experiences
+          <span className="text-gradient drop-shadow-[0_0_30px_rgba(124,58,237,0.3)]">Developer</span>
         </motion.h1>
         
         <motion.p 
