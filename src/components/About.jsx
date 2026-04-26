@@ -39,7 +39,7 @@ const About = () => {
             Elevating the <span className="text-gradient">Digital Standard</span>
           </h2>
           <p className="text-white/40 text-lg max-w-2xl mx-auto font-light">
-            I don't just build websites; I create digital experiences that resonate. My philosophy is rooted in the intersection of art and technology.
+            I build scalable websites and dashboards with a strong focus on clean UI, smooth interactions, and real-world usability. Every project I work on is designed to reflect a premium standard while remaining practical and user-focused.
           </p>
         </motion.div>
 
@@ -72,7 +72,7 @@ const About = () => {
           <div className="flex-1">
             <h3 className="text-3xl font-bold mb-4">Focused on results, <br/>driven by passion.</h3>
             <p className="text-white/50 leading-relaxed max-w-xl">
-              Every project is a unique opportunity to push boundaries. I combine strategic thinking with meticulous execution to deliver products that don't just look good, but perform exceptionally.
+              I don’t just build websites — I build products that help you grow online. I combine design, performance, and functionality to create modern digital experiences that stand out.
             </p>
           </div>
           <div className="flex gap-12">

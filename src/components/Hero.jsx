@@ -59,7 +59,7 @@ const Hero = () => {
           variants={itemVariants}
           className="text-lg md:text-xl text-white/50 mb-12 max-w-2xl mx-auto leading-relaxed font-light"
         >
-          I craft high-end digital solutions that blend <span className="text-white/80 font-normal">aesthetic excellence</span> with <span className="text-white/80 font-normal">technical precision</span>. Elevating brands through world-class development.
+          I’m <span className="text-white font-medium">Rithvik</span>, a developer crafting modern digital experiences that combine design, performance, and functionality. Building products that help you grow online.
         </motion.p>
 
         <motion.div 
