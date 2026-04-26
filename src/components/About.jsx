@@ -1,80 +1,90 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Layout, Palette, Terminal, Cpu } from 'lucide-react';
+import { Rocket, Zap, Target, Award, ShieldCheck, Globe } from 'lucide-react';
 
 const About = () => {
-  const skills = [
-    { name: 'HTML', category: 'Frontend' },
-    { name: 'CSS', category: 'Frontend' },
-    { name: 'JavaScript', category: 'Frontend' },
-    { name: 'React', category: 'Frontend' },
-    { name: 'GitHub', category: 'Tools' },
-    { name: 'Vercel', category: 'Tools' },
-    { name: 'Figma', category: 'Tools' },
-    { name: 'UI/UX Design', category: 'Other' },
-    { name: 'AI Tools', category: 'Other' },
-  ];
-
-  const categories = [
-    { name: 'Frontend', icon: <Layout className="text-accent-purple" /> },
-    { name: 'Tools', icon: <Terminal className="text-accent-blue" /> },
-    { name: 'Other', icon: <Cpu className="text-accent-neon" /> },
+  const highlights = [
+    {
+      icon: <Rocket className="text-accent-purple" />,
+      title: "Full-stack Developer",
+      desc: "Architecting robust end-to-end solutions."
+    },
+    {
+      icon: <Zap className="text-accent-blue" />,
+      title: "AI-Powered Apps",
+      desc: "Integrating cutting-edge AI for smarter UX."
+    },
+    {
+      icon: <Target className="text-accent-neon" />,
+      title: "Premium UI Focus",
+      desc: "Obsessed with pixel-perfect design aesthetics."
+    },
+    {
+      icon: <Award className="text-yellow-400" />,
+      title: "Quality Driven",
+      desc: "Building for performance and scalability."
+    }
   ];
 
   return (
-    <section id="about" className="section-padding bg-secondary relative overflow-hidden">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+    <section id="about" className="section-padding bg-primary relative overflow-hidden">
+      <div className="max-w-7xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-8">
-            Driven by <span className="text-gradient">Creativity</span> & Code
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tighter">
+            Elevating the <span className="text-gradient">Digital Standard</span>
           </h2>
-          <div className="space-y-6 text-gray-400 leading-relaxed">
-            <p>
-              My journey into freelance web development started with a passion for building things that matter. I believe every business deserves a digital presence that isn't just functional, but truly impactful.
-            </p>
-            <p>
-              I focus on problem-solving with a learning mindset, constantly exploring new technologies like AI tools to stay ahead of the curve. My goal is to bridge the gap between complex technical requirements and intuitive user experiences.
-            </p>
-            <p>
-              Whether it's a sleek landing page or a complex web application, I bring a dedicated focus on quality and detail to every project I undertake.
-            </p>
-          </div>
+          <p className="text-white/40 text-lg max-w-2xl mx-auto font-light">
+            I don't just build websites; I create digital experiences that resonate. My philosophy is rooted in the intersection of art and technology.
+          </p>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="grid gap-6"
-        >
-          {categories.map((cat) => (
-            <div key={cat.name} className="glass-card p-6 rounded-2xl group">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="p-3 rounded-xl bg-white/5 group-hover:scale-110 transition-transform">
-                  {cat.icon}
-                </div>
-                <h3 className="text-xl font-bold">{cat.name}</h3>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {highlights.map((item, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="glass-card p-8 rounded-[2rem] flex flex-col items-start group"
+            >
+              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.05] mb-6 group-hover:scale-110 group-hover:bg-white/[0.08] transition-all duration-500">
+                {item.icon}
               </div>
-              <div className="flex flex-wrap gap-2">
-                {skills
-                  .filter((s) => s.category === cat.name)
-                  .map((skill) => (
-                    <span
-                      key={skill.name}
-                      className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-300 group-hover:border-accent-purple/30 transition-colors"
-                    >
-                      {skill.name}
-                    </span>
-                  ))}
-              </div>
-            </div>
+              <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+              <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
+            </motion.div>
           ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="mt-20 p-12 rounded-[3rem] glass-morphism flex flex-col md:flex-row items-center justify-between gap-8 border border-white/[0.05]"
+        >
+          <div className="flex-1">
+            <h3 className="text-3xl font-bold mb-4">Focused on results, <br/>driven by passion.</h3>
+            <p className="text-white/50 leading-relaxed max-w-xl">
+              Every project is a unique opportunity to push boundaries. I combine strategic thinking with meticulous execution to deliver products that don't just look good, but perform exceptionally.
+            </p>
+          </div>
+          <div className="flex gap-12">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-gradient mb-1">10+</div>
+              <div className="text-xs uppercase tracking-widest text-white/30">Projects Done</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-gradient mb-1">99%</div>
+              <div className="text-xs uppercase tracking-widest text-white/30">Happy Clients</div>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
@@ -82,3 +92,4 @@ const About = () => {
 };
 
 export default About;
+

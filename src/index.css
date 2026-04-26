@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @theme {
   --color-primary: #050505;
@@ -16,6 +17,7 @@
 
   --animate-gradient-x: gradient-x 15s ease infinite;
   --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
   @keyframes gradient-x {
     0%, 100% { background-position: 0% 50%; }
@@ -29,71 +31,112 @@
 
 @layer base {
   body {
-    @apply bg-primary text-gray-100 font-sans;
+    @apply bg-primary text-gray-100 font-sans selection:bg-accent-purple/30 selection:text-accent-neon;
     overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+    @apply font-display tracking-tight;
   }
 }
 
 @layer components {
   .glass {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10;
+    @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08];
   }
   
   .glass-card {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 hover:border-accent-purple/50 transition-all duration-300;
+    @apply bg-white/[0.02] backdrop-blur-2xl border border-white/[0.05] hover:border-white/[0.15] hover:bg-white/[0.05] transition-all duration-500;
+  }
+
+  .glass-morphism {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
 
   .btn-primary {
-    @apply px-8 py-3 bg-gradient-to-r from-accent-purple to-accent-blue rounded-full font-semibold text-white hover:shadow-[0_0_20px_rgba(124,58,237,0.5)] transition-all duration-300 active:scale-95;
+    @apply relative overflow-hidden px-8 py-3 bg-white text-black rounded-full font-bold transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)];
   }
 
-  .btn-secondary {
-    @apply px-8 py-3 bg-white/5 border border-white/10 rounded-full font-semibold text-white hover:bg-white/10 transition-all duration-300 active:scale-95;
+  .btn-premium {
+    @apply relative px-8 py-3 bg-gradient-to-r from-accent-purple to-accent-blue rounded-full font-bold text-white transition-all duration-500 hover:scale-105 active:scale-95 hover:shadow-[0_0_40px_rgba(124,58,237,0.4)] overflow-hidden;
+  }
+
+  .btn-premium::before {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:animate-[shimmer_2s_infinite];
+  }
+
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-purple via-accent-blue to-accent-neon;
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-white via-white/90 to-white/40;
+  }
+
+  .text-glow {
+    @apply drop-shadow-[0_0_15px_rgba(124,58,237,0.5)];
   }
 
   .section-padding {
-    @apply py-24 px-6 md:px-12 lg:px-24;
+    @apply py-32 px-6 md:px-12 lg:px-24;
+  }
+
+  .noise-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: "";
+    opacity: 0.03;
+    z-index: 9999;
+    pointer-events: none;
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
   }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-primary);
+  background: #050505;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 100px;
+  background: #222;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent-purple);
+  background: #333;
 }
 
-/* Animated Background Shapes */
-.blob {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, rgba(14,165,233,0) 70%);
-  filter: blur(80px);
-  z-index: -1;
-  animation: float-blob 20s infinite alternate;
+/* Custom Cursor */
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: transform 0.1s ease-out;
 }
 
-@keyframes float-blob {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(100px, 100px) scale(1.1); }
+.custom-cursor-dot {
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
 }
+

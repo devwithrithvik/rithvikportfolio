@@ -36,24 +36,28 @@ const Testimonials = () => {
   const allReviews = [...dynamicReviews, ...staticReviews];
 
   return (
-    <section className="section-padding bg-secondary/30">
+    <section className="section-padding bg-primary relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex flex-col md:flex-row justify-between items-center mb-16 gap-6"
+          className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8"
         >
-          <div className="text-center md:text-left">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Client <span className="text-gradient">Success Stories</span></h2>
-            <p className="text-gray-400">Don't just take my word for it — hear from the people I've worked with.</p>
+          <div className="max-w-2xl">
+            <h2 className="text-5xl md:text-7xl font-bold mb-8 tracking-tighter">
+              Client <span className="text-gradient">Voices</span>
+            </h2>
+            <p className="text-white/40 text-lg font-light leading-relaxed">
+              I take pride in delivering excellence. Here is what my clients have to say about our journey together.
+            </p>
           </div>
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center space-x-2 px-6 py-3 bg-accent-purple/10 border border-accent-purple/50 rounded-2xl text-accent-neon font-bold hover:bg-accent-purple/20 transition-all"
+            className="flex items-center space-x-3 px-8 py-4 bg-white/5 border border-white/10 rounded-full text-white font-bold hover:bg-white/10 transition-all group"
           >
-            <Plus size={20} />
-            <span>Review Rithvik's Work</span>
+            <Plus size={20} className="group-hover:rotate-90 transition-transform" />
+            <span>Leave a Review</span>
           </button>
         </motion.div>
 
@@ -61,28 +65,33 @@ const Testimonials = () => {
           {allReviews.map((review, i) => (
             <motion.div
               key={review.id || review.name}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="glass-card p-10 rounded-3xl relative flex flex-col"
+              className="glass-card p-12 rounded-[3rem] relative flex flex-col border border-white/[0.05]"
             >
-              <Quote className="absolute top-8 right-8 text-white/5" size={60} />
-              <div className="flex mb-6">
+              <Quote className="absolute top-10 right-10 text-white/[0.03]" size={80} />
+              <div className="flex mb-8 gap-1">
                 {[...Array(5)].map((_, starIndex) => (
                   <Star 
                     key={starIndex} 
-                    size={16} 
-                    className={starIndex < (review.rating || 5) ? "text-yellow-500 fill-yellow-500" : "text-gray-600"} 
+                    size={14} 
+                    className={starIndex < (review.rating || 5) ? "text-yellow-500 fill-yellow-500" : "text-white/10"} 
                   />
                 ))}
               </div>
-              <p className="text-gray-300 italic mb-10 relative z-10 leading-relaxed flex-grow">
+              <p className="text-white/60 text-lg font-light italic mb-12 relative z-10 leading-relaxed flex-grow">
                 "{review.content || review.comment}"
               </p>
-              <div>
-                <h4 className="text-lg font-bold">{review.name}</h4>
-                <p className="text-sm text-accent-blue">{review.role}</p>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent-purple/20 to-accent-blue/20 flex items-center justify-center text-white font-bold text-sm">
+                  {review.name.charAt(0)}
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-white">{review.name}</h4>
+                  <p className="text-xs uppercase tracking-widest text-accent-blue font-bold">{review.role}</p>
+                </div>
               </div>
             </motion.div>
           ))}
@@ -95,3 +104,4 @@ const Testimonials = () => {
 };
 
 export default Testimonials;
+

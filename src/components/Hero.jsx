@@ -1,107 +1,94 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Code, Rocket, Zap } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 const Hero = () => {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background Blobs */}
-      <div className="blob top-[-10%] left-[-10%] opacity-30"></div>
-      <div className="blob bottom-[-10%] right-[-10%] opacity-20" style={{ animationDelay: '-5s', background: 'radial-gradient(circle, rgba(14,165,233,0.15) 0%, rgba(124,58,237,0) 70%)' }}></div>
-
-      <div className="max-w-7xl mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-12 items-center relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+    <section id="home" className="relative h-screen flex flex-col items-center justify-center overflow-hidden text-center px-6">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent-purple/5 blur-[120px] rounded-full -z-10 animate-pulse-slow"></div>
+      <div className="absolute top-1/4 right-0 w-[400px] h-[400px] bg-accent-blue/5 blur-[100px] rounded-full -z-10"></div>
+      
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="max-w-4xl mx-auto z-10"
+      >
+        <motion.div 
+          variants={itemVariants}
+          className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full glass border border-white/10 text-white/70 text-xs font-medium tracking-[0.2em] uppercase mb-8"
         >
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-accent-neon text-xs font-bold uppercase tracking-wider mb-6"
-          >
-            <Zap size={14} />
-            <span>Available for Freelance</span>
-          </motion.div>
-          
-          <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
-            Building <span className="text-gradient">Modern & Smart</span> Websites
-          </h1>
-          
-          <p className="text-xl text-gray-400 mb-10 max-w-lg leading-relaxed">
-            Hi, I'm <span className="text-white font-semibold">Rithvik Kolipaka</span>. I help businesses grow by creating stunning, high-performance web experiences that convert.
-          </p>
-
-          <div className="flex flex-wrap gap-4">
-            <a href="#contact" className="btn-primary flex items-center space-x-2 group">
-              <span>Hire Me</span>
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a href="#projects" className="btn-secondary">
-              View Projects
-            </a>
-          </div>
-
-          <div className="mt-12 flex items-center space-x-6 text-gray-500">
-            <div className="flex items-center space-x-2">
-              <Code size={20} className="text-accent-purple" />
-              <span className="text-sm">Clean Code</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Rocket size={20} className="text-accent-blue" />
-              <span className="text-sm">Fast Performance</span>
-            </div>
-          </div>
+          <Sparkles size={14} className="text-accent-purple" />
+          <span>Award Winning Portfolio</span>
         </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          className="relative hidden md:block"
+        
+        <motion.h1 
+          variants={itemVariants}
+          className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.9] mb-8"
         >
-          <div className="relative z-10 glass-card p-2 rounded-3xl overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-accent-purple/20 to-accent-blue/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=1000" 
-              alt="Developer Workspace" 
-              className="rounded-2xl w-full h-[500px] object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-          </div>
-          
-          {/* Floating elements */}
-          <motion.div 
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-10 -left-10 glass p-4 rounded-2xl flex items-center space-x-3 z-20 shadow-xl"
-          >
-            <div className="w-10 h-10 rounded-full bg-accent-purple/20 flex items-center justify-center">
-              <Code className="text-accent-purple" />
-            </div>
-            <div>
-              <div className="text-xs text-gray-400">Project Quality</div>
-              <div className="text-sm font-bold">100% Reliable</div>
-            </div>
-          </motion.div>
+          Hi, I’m <span className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">Rithvik</span>
+          <br />
+          <span className="text-gradient drop-shadow-[0_0_30px_rgba(124,58,237,0.3)]">Premium</span> Experiences
+        </motion.h1>
+        
+        <motion.p 
+          variants={itemVariants}
+          className="text-lg md:text-xl text-white/50 mb-12 max-w-2xl mx-auto leading-relaxed font-light"
+        >
+          I craft high-end digital solutions that blend <span className="text-white/80 font-normal">aesthetic excellence</span> with <span className="text-white/80 font-normal">technical precision</span>. Elevating brands through world-class development.
+        </motion.p>
 
-          <motion.div 
-            animate={{ y: [0, 20, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute bottom-10 -right-10 glass p-4 rounded-2xl flex items-center space-x-3 z-20 shadow-xl"
-          >
-            <div className="w-10 h-10 rounded-full bg-accent-blue/20 flex items-center justify-center">
-              <Rocket className="text-accent-blue" />
-            </div>
-            <div>
-              <div className="text-xs text-gray-400">Delivery Speed</div>
-              <div className="text-sm font-bold">Ultra Fast</div>
-            </div>
-          </motion.div>
+        <motion.div 
+          variants={itemVariants}
+          className="flex flex-col md:flex-row items-center justify-center gap-6"
+        >
+          <a href="#projects" className="btn-premium flex items-center space-x-2 group w-full md:w-auto justify-center">
+            <span>View My Work</span>
+            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+          </a>
+          <a href="#contact" className="px-8 py-3 rounded-full border border-white/10 text-white/70 font-bold transition-all duration-300 hover:bg-white/5 hover:text-white w-full md:w-auto text-center">
+            Let’s Talk
+          </a>
         </motion.div>
-      </div>
+      </motion.div>
+
+      {/* Scroll Indicator */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 1 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-4"
+      >
+        <span className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-medium">Scroll to explore</span>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-white/20 to-transparent"></div>
+      </motion.div>
     </section>
   );
 };
 
 export default Hero;
+
