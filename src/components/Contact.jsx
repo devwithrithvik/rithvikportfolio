@@ -86,7 +86,7 @@ const Contact = () => {
 
   const socials = [
     { icon: <Mail size={20} />, href: "mailto:rithvikkolipaka12@gmail.com", label: "Email", color: "hover:text-accent-purple" },
-    { icon: <MessageSquare size={20} />, href: "https://wa.me/911234567890", label: "WhatsApp", color: "hover:text-green-400" },
+    { icon: <MessageSquare size={20} />, href: "https://wa.me/917670863913?text=Hi%20Rithvik,%20I'm%20interested%20in%20your%20services!", label: "WhatsApp", color: "hover:text-green-400" },
     { icon: <Linkedin size={20} />, href: "https://www.linkedin.com/in/rithvik-kolipaka-3479b5383", label: "LinkedIn", color: "hover:text-accent-blue" },
     { icon: <Github size={20} />, href: "https://github.com/devwithrithvik", label: "GitHub", color: "hover:text-white" },
   ];
