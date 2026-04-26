@@ -1,34 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, MessageSquare, Send, Github, Linkedin, CheckCircle, ArrowRight } from 'lucide-react';
+import { Mail, MessageSquare, Send, Github, Linkedin, CheckCircle, ArrowRight, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
+  const formRef = useRef();
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState('idle'); // idle, sending, success
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState('idle'); // idle, sending, success, error
+  const [honeypot, setHoneypot] = useState('');
+
+  const validate = () => {
+    let tempErrors = {};
+    if (!formData.name.trim()) tempErrors.name = "Name is required";
+    if (!formData.email.trim()) {
+      tempErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      tempErrors.email = "Email is invalid";
+    }
+    if (!formData.message.trim()) tempErrors.message = "Message is required";
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Spam prevention: if honeypot is filled, silently ignore
+    if (honeypot) {
+      console.log("Spam detected");
+      return;
+    }
+
+    if (!validate()) return;
+
     setStatus('sending');
 
-    try {
-      const response = await fetch('/api/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+    // Replace these with your actual EmailJS IDs from your dashboard
+    // It's best to put these in a .env file
+    const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_id';
+    const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_id';
+    const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'public_key';
 
-      if (response.ok) {
-        setStatus('success');
-        setFormData({ name: '', email: '', message: '' });
-        setTimeout(() => setStatus('idle'), 5000);
-      } else {
-        setStatus('idle');
-        alert('Failed to send message. Please try again.');
+    try {
+      // 1. Send via EmailJS
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          from_name: formData.name,
+          reply_to: formData.email,
+          message: formData.message,
+          to_email: 'rithvikolipaka12@gmail.com',
+        },
+        PUBLIC_KEY
+      );
+
+      // 2. Backup to MongoDB (Optional but implemented as requested)
+      try {
+        await fetch('/api/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+      } catch (backupError) {
+        console.warn('MongoDB Backup failed, but EmailJS succeeded:', backupError);
       }
+
+      setStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+      setErrors({});
+      setTimeout(() => setStatus('idle'), 6000);
     } catch (error) {
-      console.error('Error sending message:', error);
-      setStatus('idle');
-      alert('Error sending message. Please try again.');
+      console.error('EmailJS Error:', error);
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 6000);
     }
   };
 
@@ -93,66 +139,97 @@ const Contact = () => {
               viewport={{ once: true }}
               className="relative"
             >
-              <AnimatePresence>
+              <AnimatePresence mode="wait">
                 {status === 'success' && (
                   <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
                     className="absolute inset-0 z-20 backdrop-blur-md bg-black/40 flex flex-col items-center justify-center text-center p-6 rounded-[2rem]"
                   >
                     <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mb-6">
                       <CheckCircle size={40} className="text-green-500" />
                     </div>
-                    <h3 className="text-3xl font-bold mb-3">Message Sent!</h3>
-                    <p className="text-white/50">I'll get back to you within 24 hours.</p>
+                    <h3 className="text-3xl font-bold mb-3">Success!</h3>
+                    <p className="text-white/50">Message sent successfully. I will get back to you soon.</p>
+                  </motion.div>
+                )}
+
+                {status === 'error' && (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="absolute inset-0 z-20 backdrop-blur-md bg-black/40 flex flex-col items-center justify-center text-center p-6 rounded-[2rem]"
+                  >
+                    <div className="w-20 h-20 rounded-full bg-red-500/20 flex items-center justify-center mb-6">
+                      <AlertCircle size={40} className="text-red-500" />
+                    </div>
+                    <h3 className="text-3xl font-bold mb-3">Oops!</h3>
+                    <p className="text-white/50">Something went wrong. Please try again or email me directly.</p>
+                    <button 
+                      onClick={() => setStatus('idle')}
+                      className="mt-6 text-sm text-white underline underline-offset-4"
+                    >
+                      Try again
+                    </button>
                   </motion.div>
                 )}
               </AnimatePresence>
 
               <form onSubmit={handleSubmit} className="space-y-8">
+                {/* Honeypot field - hidden from users */}
+                <input
+                  type="text"
+                  name="bot-field"
+                  className="hidden"
+                  onChange={(e) => setHoneypot(e.target.value)}
+                />
+
                 <div className="space-y-6">
                   <div className="relative group">
                     <input 
                       type="text" 
-                      required
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
                       placeholder="Your Name" 
-                      className="w-full bg-transparent border-b border-white/10 py-4 text-xl focus:outline-none focus:border-white transition-colors placeholder:text-white/10"
+                      className={`w-full bg-transparent border-b ${errors.name ? 'border-red-500/50' : 'border-white/10'} py-4 text-xl focus:outline-none focus:border-white transition-colors placeholder:text-white/10`}
                     />
+                    {errors.name && <span className="text-xs text-red-500/70 mt-1 absolute left-0 bottom-[-20px]">{errors.name}</span>}
                   </div>
                   <div className="relative group">
                     <input 
                       type="email" 
-                      required
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
                       placeholder="Your Email" 
-                      className="w-full bg-transparent border-b border-white/10 py-4 text-xl focus:outline-none focus:border-white transition-colors placeholder:text-white/10"
+                      className={`w-full bg-transparent border-b ${errors.email ? 'border-red-500/50' : 'border-white/10'} py-4 text-xl focus:outline-none focus:border-white transition-colors placeholder:text-white/10`}
                     />
+                    {errors.email && <span className="text-xs text-red-500/70 mt-1 absolute left-0 bottom-[-20px]">{errors.email}</span>}
                   </div>
                   <div className="relative group">
                     <textarea 
                       rows="4" 
-                      required
                       value={formData.message}
                       onChange={(e) => setFormData({...formData, message: e.target.value})}
                       placeholder="Your Message" 
-                      className="w-full bg-transparent border-b border-white/10 py-4 text-xl focus:outline-none focus:border-white transition-colors resize-none placeholder:text-white/10"
+                      className={`w-full bg-transparent border-b ${errors.message ? 'border-red-500/50' : 'border-white/10'} py-4 text-xl focus:outline-none focus:border-white transition-colors resize-none placeholder:text-white/10`}
                     ></textarea>
+                    {errors.message && <span className="text-xs text-red-500/70 mt-1 absolute left-0 bottom-[-20px]">{errors.message}</span>}
                   </div>
                 </div>
 
                 <motion.button 
                   type="submit" 
                   disabled={status === 'sending'}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full btn-premium flex items-center justify-center space-x-3 py-6 group"
+                  whileHover={{ scale: status === 'sending' ? 1 : 1.02 }}
+                  whileTap={{ scale: status === 'sending' ? 1 : 0.98 }}
+                  className="w-full btn-premium flex items-center justify-center space-x-3 py-6 group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <span className="text-lg font-bold">{status === 'sending' ? 'Sending...' : 'Send Inquiry'}</span>
-                  <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+                  <span className="text-lg font-bold">
+                    {status === 'sending' ? 'Sending...' : 'Send Inquiry'}
+                  </span>
+                  {status !== 'sending' && <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />}
                 </motion.button>
               </form>
             </motion.div>
@@ -164,4 +241,5 @@ const Contact = () => {
 };
 
 export default Contact;
+
 
